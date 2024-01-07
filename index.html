@@ -1,0 +1,442 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="a training-free method powered by Stable Diffusion that generates complete room-scale 3D meshes with high-fidelity texture given a sparse collection of RGBD images.">
+  <meta name="keywords" content="3D Generation, 3D Reconstruction, Scene Generation, Diffusion Model, Stable Diffusion">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sparse2Room: 3D Indoor Scene Generation from Sparse Image Collections</title>
+  
+  <!-- Google fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro">
+
+  <!-- bulma css template -->
+  <link rel="stylesheet" href="./css/bulma.min.css">
+  <link rel="stylesheet" href="./css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="./css/twentytwenty.css">
+  <link rel="stylesheet" href="./css/index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./js/fontawesome.all.min.js"></script>
+  <script src="./js/bulma-carousel.min.js"></script>
+  <script src="./js/bulma-carousel.js"></script>
+  <script src="./js/bulma-slider.min.js"></script>
+  <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/jquery.event.move.js"></script>
+  <script src="./js/jquery.twentytwenty.js"></script>
+  <script src="./js/index.js"></script>
+
+</head>
+<body>
+
+
+  
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://justin871030.github.io/">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://ttaoretw.github.io/DreaMo/">
+            DreaMo
+          </a>
+        </div>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Sparse2Room: 3D Indoor Scene Generation <br> from Sparse Image Collections</h1>
+          
+          <div>
+            <p class="subtitle is-4"> Arxiv 2023 </p>
+          </div> <br>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://justin871030.github.io/">Ming-Feng Li</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="#">Yueh-Feng Ku</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="#">Hong-Xuan Yen</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="#">Chi Liu</a><sup>4</sup>, 
+            </span> <br>
+            <span class="author-block">
+              <a href="https://yulunalexliu.github.io/">Yu-Lun Liu</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="#">Albert Y. C. Chen</a><sup>4</sup>,
+            </span>
+            <span class="author-block">
+              <a href="#">Cheng-Hao Kuo</a><sup>4</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://aliensunmin.github.io/">Min Sun</a><sup>2,4</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Carnegie Mellon University,</span>
+            <span class="author-block"><sup>2</sup>National Tsing Hua University,</span> <br>
+            <span class="author-block"><sup>3</sup>National Yang Ming Chiao Tung University,</span>
+            <span class="author-block"><sup>4</sup>Amazon</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (coming soon)</span>
+                  </a>
+              </span>
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a href="https://youtu.be/lkA1IvDY8-c"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+
+      <div id="results-carousel1" class="carousel results-carousel">
+
+        <div class="item">
+          <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.25">
+            <div class="video">
+              <img id="teaser" src="./images/pano/scannet_scene_0628_01_init_rgb_3.png" width="100%"></img>
+            </div>
+            <div class="video">
+              <img id="teaser" src="./images/pano/scannet_scene_0628_01_comp_rgb_3.png" width="100%"></img>
+            </div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.25">
+            <div class="video">
+              <img id="teaser" src="./images/pano/scannet_scene_0679_01_init_rgb_3.png" width="100%"></img>
+            </div>
+            <div class="video">
+              <img id="teaser" src="./images/pano/scannet_scene_0679_01_comp_rgb_3.png" width="100%"></img>
+            </div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.25">
+            <div class="video">
+              <img id="teaser" src="./images/pano/arkit_scene_41069021_init_rgb_5.png" width="100%"></img>
+            </div>
+            <div class="video">
+              <img id="teaser" src="./images/pano/arkit_scene_41069021_comp_rgb_5.png" width="100%"></img>
+            </div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.25">
+            <div class="video">
+              <img id="teaser" src="./images/pano/arkit_scene_47334360_init_rgb_5.png" width="100%"></img>
+            </div>
+            <div class="video">
+              <img id="teaser" src="./images/pano/arkit_scene_47334360_comp_rgb_5.png" width="100%"></img>
+            </div>
+          </div>
+        </div>
+
+      </div>
+<!-- 
+      <div id="results-carousel2" class="carousel results-carousel">
+        <div class="item">
+          <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.25">
+            <div class="video">
+              <img id="teaser" src="./images/pano/arkit_scene_41069021_init_depth_5.png" width="100%"></img>
+            </div>
+            <div class="video">
+              <img id="teaser" src="./images/pano/arkit_scene_41069021_comp_depth_5.png" width="100%"></img>
+            </div>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="twentytwenty-container" data-orientation="horizontal" ratio="0.25">
+            <div class="video">
+              <img id="teaser" src="./images/pano/arkit_scene_47334360_init_depth_5.png" width="100%"></img>
+            </div>
+            <div class="video">
+              <img id="teaser" src="./images/pano/arkit_scene_47334360_comp_depth_5.png" width="100%"></img>
+            </div>
+          </div>
+        </div>
+
+      </div> -->
+
+      <p class="content has-text-centered is-size-5">
+        Given a sparse collection of RGBD images that capture a scene, <br>
+        our method can generate complete room-scale 3D meshes with high-fidelity texture.
+        <!-- <br> (without human-designed text prompts and camera trajectories). -->
+      </p>
+      
+    </div>
+  </div>
+</section>
+
+<script>
+    bulmaCarousel.attach('#results-carousel1', {
+        slidesToScroll: 1,
+        slidesToShow: 2
+    });
+    bulmaCarousel.attach('#results-carousel2', {
+        slidesToScroll: 1,
+        slidesToShow: 2
+    });
+    $(function(){
+        $(".twentytwenty-container").twentytwenty({
+            before_label: 'Sparse Observation', // Set a custom before label
+            after_label: 'Complete Scene', // Set a custom after label
+            default_offset_pct: 0.5,
+            click_to_move: false
+        });
+    });
+</script>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <img id="teaser" src="./images/teaser.png" width="90%"></img>
+        <div class="content has-text-justified">
+          <br>
+          <p>
+            We propose Sparse2Room, a novel method that generates a complete room-scale 3D mesh with high-fidelity texture 
+            given a sparse collection of RGBD images. 
+            We first project the sparse RGBD images to a highly incomplete 3D mesh. 
+            Then, instead of iteratively generating novel views to fill in the void, 
+            we select a plausible room center and generate a cross-view consistent panoramic RGBD image 
+            that completes a big portion of the mesh. 
+            In particular, we leverage the multi-view diffusion idea to concurrently denoise multiple images 
+            rendered with equirectangular projection, ensuring both appearance and geometric consistency. 
+            Furthermore, we maintain their stylistic consistency through textual inversion techniques. 
+            Finally, we iteratively generate separate novel views to fill the remaining holes within the room. 
+            In order to generate high-fidelity and diverse room structures, we leverage Stable Diffusion 
+            trained on large-scale datasets to generate appearance and reconstruct their geometry via monocular depth estimation. 
+            Sparse2Room outperforms other state-of-the-art methods under most appearance and geometric metrics 
+            on ScanNet and ARKitScenes datasets, even though Sparse2Room is not trained on these datasets.
+          </p>
+          <br>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Pipeline of Sparse2Room</h2>
+        <div class="content has-text-justified">
+          <img id="teaser" src="./images/pipeline.jpg" height="100%"></img>
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            <b> Pipeline of Sparse2Room: </b> 
+            (a) Firstly, we extract text embeddings as a token to represent the style of provided RGBD images via textual inversion. 
+            Next, we project these images to a 3D mesh. 
+            (b) Following that, we render a panorama from a plausible room center and use equirectangular projection 
+            to render various viewpoints of the scene from the panoramic image. Then, we propose EG-Multidiffusion 
+            that satisfies equirectangular geometry to concurrently denoise these images and determine their depth 
+            via monocular depth estimation, resulting in a cross-view consistent panoramic RGBD image. 
+            (c) Lastly, we sample novel views from the mesh to fill in holes, resulting in a complete mesh.
+          </p>
+        </div>
+      </div>
+    </div>
+<!-- 
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Visual Comparison with RGBD2</h2>
+        <div class="publication-video">
+          <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+            <source src="./videos/supplementary_video.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Visual Comparison with RGBD2</h2>
+    
+    <div class="columns is-centered has-text-centered">
+
+      <div class="column">
+        <div class="twentytwenty-container1" data-orientation="horizontal" ratio="1.0">
+          <div class="video">
+            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+              <source src="./videos/init_comp/scannet_scene_0628_01_rgb_50_rgbd2.mp4"
+                      type="video/mp4">
+            </video>
+          </div>
+          <div class="video">
+            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+              <source src="./videos/init_comp/scannet_scene_0628_01_rgb_50_ours.mp4"
+                      type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="twentytwenty-container1" data-orientation="horizontal" ratio="1.0">
+          <div class="video">
+            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+              <source src="./videos/init_comp/scannet_scene_0628_01_depth_50_rgbd2.mp4"
+                      type="video/mp4">
+            </video>
+          </div>
+          <div class="video">
+            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+              <source src="./videos/init_comp/scannet_scene_0628_01_depth_50_ours.mp4"
+                      type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    
+  </div>
+</section>
+
+<script>
+  $(function(){
+      $(".twentytwenty-container1").twentytwenty({
+          before_label: 'RGBD2', // Set a custom before label
+          after_label: 'Ours', // Set a custom after label
+          default_offset_pct: 0.5,
+          click_to_move: false
+      });
+  });
+</script>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Results on ScanNet</h2>
+    <img id="teaser" src="./images/scannet.png" width="100%"></img>
+
+    <div class="content has-text-justified">
+      <p>
+        <b> Comparison with Baselines on Scannet: </b> 
+        Sparse2Room can produce a comprehensive room-scale mesh with high-fidelity texture, even when provided with sparse RGBD observations. 
+        In comparison to the prior method RGBD2[1], Sparse2Room excels in generating more complete meshes and high-fidelity images. 
+        Besides, while Text2Room* (adapted from Text2Room[2]) achieves high-fidelity texture, it may generate cross-view inconsistent geometry and artifacts.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>
+      @article{ming2024sparse2room,
+        author  = {Ming-Feng Li, Yueh-Feng Ku, Hong-Xuan Yen, Chi Liu, Yu-Lun Liu, Albert Y. C. Chen, Cheng-Hao Kuo, Min Sun},
+        title   = {Sparse2Room: 3D Indoor Scene Generation from Sparse Image Collections},
+        journal = {arXiv preprint arXiv:},
+        year    = {2024}
+      }
+    </code></pre>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">References</h2>
+    <div class="content has-text-justified">
+      <p>
+        [1] Lei, Jiabao, Jiapeng Tang, and Kui Jia. "RGBD2: Generative Scene Synthesis via Incremental View Inpainting Using RGBD Diffusion Models." CVPR 2023. <br>
+        [2] Höllein, Lukas, et al. "Text2room: Extracting textured 3d meshes from 2d text-to-image models." ICCV 2023.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+          This website is adapted from the webpage template of <a href=https://luciddreamer-cvlab.github.io/> LucidDreamer </a> and <a href=https://nerfies.github.io/> Nerfies</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
